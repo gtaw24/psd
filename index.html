@@ -24,8 +24,8 @@
       const firstName = document.getElementById('firstName').value;
       const lastName = document.getElementById('lastName').value;
 
-      // Load the PSD file
-      const psdUrl = 'https://drive.google.com/file/d/1VtEZibkcvWD7MGXySnYISK391IGadfHP/view?usp=drive_link'; // Replace with the URL to your PSD file
+      // URL to your PSD file hosted on Dropbox
+      const psdFileUrl = 'https://www.dropbox.com/scl/fi/ef44fgidz0411grl52e8x/OTBT1S1.psd?rlkey=aqfy58jytie9o0tlbddodyvbz&st=2xadpsub&dl=0';
 
       const img = new Image();
       img.crossOrigin = 'anonymous'; // Enable cross-origin requests
@@ -52,7 +52,7 @@
         downloadLink.click();
       };
 
-      img.src = psdUrl;
+      img.src = psdFileUrl;
     });
   </script>
 </body>
