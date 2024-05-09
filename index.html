@@ -7,51 +7,52 @@
 </head>
 <body>
   <h1>Replace Text in PSD</h1>
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" name="psdFile" id="psdFile" accept=".psd">
-    <br>
+  <form id="inputForm">
     <label for="firstName">First Name:</label>
-    <input type="text" name="firstName" id="firstName">
+    <input type="text" name="firstName" id="firstName" required>
     <br>
     <label for="lastName">Last Name:</label>
-    <input type="text" name="lastName" id="lastName">
+    <input type="text" name="lastName" id="lastName" required>
     <br>
-    <button type="submit">Upload & Replace Text</button>
+    <button type="submit">Replace Text & Download PNG</button>
   </form>
-  <button id="generateBtn" style="display: none;">Generate PNG</button>
-  <div id="result"></div>
 
   <script>
-    document.getElementById('uploadForm').addEventListener('submit', (e) => {
+    document.getElementById('inputForm').addEventListener('submit', (e) => {
       e.preventDefault();
-      
-      const psdFile = document.getElementById('psdFile').files[0];
+
       const firstName = document.getElementById('firstName').value;
       const lastName = document.getElementById('lastName').value;
 
-      const reader = new FileReader();
-      reader.onload = function(event) {
-        const img = new Image();
-        img.src = event.target.result;
-        img.onload = function() {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
+      // Load the PSD file
+      const psdUrl = 'https://drive.google.com/file/d/1VtEZibkcvWD7MGXySnYISK391IGadfHP/view?usp=drive_link'; // Replace with the URL to your PSD file
 
-          ctx.font = '20px Arial';
-          ctx.fillText(firstName, 100, 100); // Adjust text position
-          ctx.fillText(lastName, 100, 150); // Adjust text position
+      const img = new Image();
+      img.crossOrigin = 'anonymous'; // Enable cross-origin requests
+      img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
 
-          const downloadLink = document.createElement('a');
-          downloadLink.href = canvas.toDataURL('image/png');
-          downloadLink.download = 'edited_image.png';
-          downloadLink.click();
-        };
+        // Set canvas dimensions same as image dimensions
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        // Draw image onto canvas
+        ctx.drawImage(img, 0, 0);
+
+        // Replace text
+        ctx.font = '20px Arial';
+        ctx.fillText(firstName, 100, 100); // Adjust text position
+        ctx.fillText(lastName, 100, 150); // Adjust text position
+
+        // Convert canvas to PNG and download
+        const downloadLink = document.createElement('a');
+        downloadLink.href = canvas.toDataURL('image/png');
+        downloadLink.download = 'edited_image.png';
+        downloadLink.click();
       };
-      reader.readAsDataURL(psdFile);
-      document.getElementById('generateBtn').style.display = 'block';
+
+      img.src = psdUrl;
     });
   </script>
 </body>
