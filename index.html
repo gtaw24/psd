@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PSD Text Replacement</title>
+</head>
+<body>
+  <h1>Replace Text in PSD</h1>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" name="psdFile" id="psdFile" accept=".psd">
+    <br>
+    <label for="firstName">First Name:</label>
+    <input type="text" name="firstName" id="firstName">
+    <br>
+    <label for="lastName">Last Name:</label>
+    <input type="text" name="lastName" id="lastName">
+    <br>
+    <button type="submit">Upload & Replace Text</button>
+  </form>
+  <button id="generateBtn" style="display: none;">Generate PNG</button>
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('uploadForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const psdFile = document.getElementById('psdFile').files[0];
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+
+          ctx.font = '20px Arial';
+          ctx.fillText(firstName, 100, 100); // Adjust text position
+          ctx.fillText(lastName, 100, 150); // Adjust text position
+
+          const downloadLink = document.createElement('a');
+          downloadLink.href = canvas.toDataURL('image/png');
+          downloadLink.download = 'edited_image.png';
+          downloadLink.click();
+        };
+      };
+      reader.readAsDataURL(psdFile);
+      document.getElementById('generateBtn').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
